@@ -13,15 +13,9 @@ class cdh4::rpm_source($cdhversion = 4) {
 	}
 
 	exec { "import_cloudera_yum_key":
-		command   => "sudo rpm --import http://archive.cloudera.com/cdh4/redhat/6/x86_64/cdh/RPM-GPG-KEY-cloudera",
+		command   => "rpm --import http://archive.cloudera.com/cdh4/redhat/6/x86_64/cdh/RPM-GPG-KEY-cloudera",
 		subscribe => File["/etc/yum.repos.d/cdh4.repo"],
 		refreshonly => true,
 	}
 
-	exec { "yum_check_update_for_cloudera":
-		command => "/usr/bin/yum check-update",
-		timeout => 240,
-		refreshonly => true,
-		subscribe => [File["/etc/yum.repos.d/cdh4.repo"], Exec["import_cloudera_yum_key"]],
-	}
 }
